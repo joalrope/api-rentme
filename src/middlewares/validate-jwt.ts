@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-//import { User } from "../models";
+import { HttpStatus } from "../helpers";
+import { User } from "../models";
 
 interface ITokenPayload {
   uid: string;
@@ -16,7 +17,7 @@ export const validateJWT = async (
   const token = req.header("x-token");
 
   if (!token) {
-    return res.status(401).json({
+    return res.status(HttpStatus.UNAUTHORIZED).json({
       ok: false,
       msg: "No hay token en la petición",
       result: {},
@@ -28,16 +29,20 @@ export const validateJWT = async (
 
     const { uid } = decoded as ITokenPayload;
 
-    console.log({ uid });
-
     // leer el usuario que corresponde al uid
-    //const user = await User.findById(uid);
+    const user = await User.findByPk(uid);
+
+    if (!user) {
+      return res.status(HttpStatus.UNAUTHORIZED).json({
+        msg: "Token no válido - usuario no existe DB",
+      });
+    }
 
     next();
     return;
   } catch (error) {
     console.log(error);
-    return res.status(401).json({
+    return res.status(HttpStatus.UNAUTHORIZED).json({
       msg: `Invalid token - ${error}`,
     });
   }

@@ -1,3 +1,4 @@
 export { generateJWT } from "./jwt";
 export { sendEmail } from "./mailer";
-export { userIdAlreadyExists } from "./db-validators";
+export { HttpStatus } from "./constants/http-status-code";
+export { userIdAlreadyExists, emailAlreadyExists } from "./db-validators";

@@ -1,5 +1,6 @@
 import { Response } from "express";
 export { changePassword, forgotPassword, login } from "./auth";
+export { createUser, getUsers, getUser } from "./users";
 
 export interface IResponse {
   ok: boolean;

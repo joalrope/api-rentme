@@ -2,40 +2,40 @@ import { Router } from "express";
 import { body, check } from "express-validator";
 
 import { validateFields, validateJWT } from "../middlewares";
-import { userIdAlreadyExists } from "../helpers";
-import /*createUser,
-  getUsers,
+import { emailAlreadyExists, userIdAlreadyExists } from "../helpers";
+import {
+  createUser,
   getUser,
+  getUsers,
+  /* getUser,
   updateUser,
   deleteUser,
   getUsersByEmail,*/
-"../controllers";
+} from "../controllers";
 
 export const userRouter = Router();
 
 userRouter.post(
   "/",
   [
-    body("names", "Names is required").not().isEmpty(),
+    body("firstName", "firstName is required").not().isEmpty(),
+    body("lastName", "lastName is required").not().isEmpty(),
+    body("email", "The email is invalid").isEmail(),
+    body("email").custom(emailAlreadyExists),
     body("password", "The password must be more than 6 letters").isLength({
       min: 6,
     }),
-    body("email", "The email is invalid").isEmail(),
     validateFields,
-  ]
-  //createUser
+  ],
+  createUser
 );
 
-userRouter.get("/" /*getUsers*/);
+userRouter.get("/", getUsers);
 userRouter.get("/email/:email" /*getUsersByEmail*/);
 userRouter.get(
   "/:id",
-  [
-    check("id", "Not a valid ID").isMongoId(),
-    check("id").custom(userIdAlreadyExists),
-    validateFields,
-  ]
-  //getUser
+  [check("id").custom(userIdAlreadyExists), validateFields],
+  getUser
 );
 
 userRouter.put(

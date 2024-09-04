@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+import { HttpStatus } from "../helpers";
 const { validationResult } = require("express-validator");
 
 export const validateFields = (
@@ -8,9 +9,8 @@ export const validateFields = (
 ) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.status(200).json({
+    return res.status(HttpStatus.CONFLICT).json({
       ok: false,
-      statuscode: 409,
       msg: errors.errors[0].msg,
       result: { errors },
     });

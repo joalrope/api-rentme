@@ -36,7 +36,7 @@ export class Server {
 
   async connectDB() {
     try {
-      await sequelize.sync();
+      await sequelize.sync({ force: true, alter: true });
       console.log("Connection has been established successfully.");
     } catch (error) {
       console.error("Unable to connect to the database:", error);
@@ -44,11 +44,6 @@ export class Server {
   }
 
   middlewares() {
-    const uploadsPath =
-      process.env.NODE_ENV === "development"
-        ? "uploads"
-        : `${process.env.DISK_MOUNT_PATH}/uploads`;
-
     // CORS
     const origin = [
       String(process.env.URL_BASE1),
@@ -66,7 +61,6 @@ export class Server {
 
     // statics Directories
     this.app.use(express.static("public"));
-    this.app.use(express.static(uploadsPath));
   }
 
   listen() {

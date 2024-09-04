@@ -1,6 +1,6 @@
 import { config } from "dotenv";
 import { Sequelize } from "sequelize-typescript";
-import { User } from "../models";
+import { Service } from "../models";
 
 config();
 
@@ -17,7 +17,7 @@ export const sequelize = new Sequelize({
   username,
   password,
   dialect: "postgres",
-  models: [User],
+  models: [Service],
 });
 
 export const seedDB = async () => {

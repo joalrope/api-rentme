@@ -1,16 +1,17 @@
 import { Request, Response } from "express";
-import { IService, Service } from "../models";
+import { IProperty, Property } from "../models";
 import { HttpStatus } from "../helpers";
+import { generateSlugify } from "../helpers/slugify";
 
-export const getServices = async (req: Request, res: Response) => {
+export const getProperties = async (req: Request, res: Response) => {
   const { limit = 5, from = 0 } = req.query;
   let total!: number;
-  let services!: IService[];
+  let properties!: IProperty[];
 
   try {
-    [total, services] = await Promise.all([
-      Service.count(),
-      Service.findAll({ offset: Number(from), limit: Number(limit) }),
+    [total, properties] = await Promise.all([
+      Property.count(),
+      Property.findAll({ offset: Number(from), limit: Number(limit) }),
     ]);
   } catch (error) {
     return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
@@ -22,20 +23,20 @@ export const getServices = async (req: Request, res: Response) => {
 
   return res.status(HttpStatus.OK).json({
     ok: true,
-    msg: "The list of services was successfully obtained",
+    msg: "The list of properties was successfully obtained!!",
     result: {
       total,
-      services,
+      properties,
     },
   });
 };
 
-export const getService = async (req: Request, res: Response) => {
+export const getProperty = async (req: Request, res: Response) => {
   const { id } = req.params;
-  let serviceDB: IService | null;
+  let propertyDB: IProperty | null;
 
   try {
-    serviceDB = await Service.findByPk(id);
+    propertyDB = await Property.findByPk(id);
   } catch (error) {
     return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
       ok: false,
@@ -44,48 +45,29 @@ export const getService = async (req: Request, res: Response) => {
     });
   }
 
-  if (!serviceDB) {
+  if (!propertyDB) {
     return res.status(HttpStatus.NOT_FOUND).json({
       ok: false,
-      msg: `The service with id: ${id} does not exist`,
-      result: serviceDB,
+      msg: `The property with id: ${id} does not exist`,
+      result: propertyDB,
     });
   }
 
   return res.status(HttpStatus.OK).json({
     ok: true,
-    msg: `The service with id: ${id} was successfully obtained`,
-    result: serviceDB,
+    msg: `The property with id: ${id} was successfully obtained`,
+    result: propertyDB,
   });
 };
 
-export const createService = async (req: Request, res: Response) => {
-  const { name, password, ...restData } = req.body;
+export const createProperty = async (req: Request, res: Response) => {
+  let property: IProperty;
+  const { title, ...restData } = req.body;
 
-  let servicesDB: IService | null;
-
-  try {
-    servicesDB = await Service.findOne({ where: { name } });
-  } catch (error) {
-    return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
-      ok: false,
-      msg: "Please talk to the administrator",
-      result: { error },
-    });
-  }
-
-  if (servicesDB) {
-    return res.status(HttpStatus.CONFLICT).json({
-      ok: false,
-      msg: `There is already a service with the email ${name}`,
-      result: {},
-    });
-  }
-
-  let service!: IService;
+  const slug = generateSlugify(title);
 
   try {
-    service = new Service({ name, password, ...restData });
+    property = new Property({ title, slug, ...restData });
   } catch (error) {
     return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
       ok: false,
@@ -95,7 +77,7 @@ export const createService = async (req: Request, res: Response) => {
   }
 
   try {
-    await service.save();
+    await property.save();
   } catch (error) {
     return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
       ok: false,
@@ -106,20 +88,20 @@ export const createService = async (req: Request, res: Response) => {
 
   return res.status(HttpStatus.CREATED).json({
     ok: true,
-    msg: "Service created successfully",
+    msg: "Property created successfully",
     result: {
-      service,
+      property,
     },
   });
 };
 
-export const updateService = async (req: Request, res: Response) => {
+export const updateProperty = async (req: Request, res: Response) => {
   const { id } = req.params;
 
-  let service!: IService | null;
+  let property!: IProperty | null;
 
   try {
-    service = await Service.findByPk(id);
+    property = await Property.findByPk(id);
   } catch (error) {
     return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
       ok: false,
@@ -128,30 +110,30 @@ export const updateService = async (req: Request, res: Response) => {
     });
   }
 
-  if (!service) {
+  if (!property) {
     return res.status(HttpStatus.CONFLICT).json({
       ok: false,
-      msg: `The service with id: ${id} does not exist`,
+      msg: `The property with id: ${id} does not exist`,
       result: {},
     });
   }
 
-  await service?.update({ ...req.body });
+  await property?.update({ ...req.body });
 
-  await service?.save();
+  await property?.save();
 
   return res.status(HttpStatus.OK).json({
     ok: true,
-    msg: "Service updated successfully",
-    result: service,
+    msg: "Property updated successfully",
+    result: property,
   });
 };
 
-export const deleteService = async (req: Request, res: Response) => {
+export const deleteProperty = async (req: Request, res: Response) => {
   const { id } = req.params;
 
   try {
-    await Service.destroy({ where: { id } });
+    await Property.destroy({ where: { id } });
   } catch (error) {
     return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
       ok: false,
@@ -162,7 +144,7 @@ export const deleteService = async (req: Request, res: Response) => {
 
   return res.status(HttpStatus.OK).json({
     ok: true,
-    msg: "Service deleted successfully",
+    msg: "Property deleted successfully",
     result: {},
   });
 };

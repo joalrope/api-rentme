@@ -58,12 +58,12 @@ export class Service extends Model implements IService {
   })
   declare city: string;
 
-  @Column({
+  /*@Column({
     type: DataType.GEOMETRY("POINT"),
     allowNull: false,
     defaultValue: [0, 0],
   })
-  declare Geolocation: [number, number];
+  declare Geolocation: [number, number];*/
 
   @Column({
     type: DataType.DOUBLE(3, 2),

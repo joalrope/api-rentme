@@ -7,7 +7,7 @@ import {
   UpdatedAt,
 } from "sequelize-typescript";
 
-export interface IService extends Model {
+export interface IUser extends Model {
   id: string;
   firstName: string;
   lastName: string;
@@ -24,7 +24,7 @@ export interface IService extends Model {
   modelName: "User",
   timestamps: true,
 })
-export class Service extends Model implements IService {
+export class User extends Model implements IUser {
   @Column({
     primaryKey: true,
     type: DataType.UUID,

@@ -1,6 +1,8 @@
 import { config } from "dotenv";
 import { Sequelize } from "sequelize-typescript";
-import { Service } from "../models";
+import bcryptjs from "bcryptjs";
+
+import { Property, Reservation, Service, User } from "../models";
 
 config();
 
@@ -17,11 +19,32 @@ export const sequelize = new Sequelize({
   username,
   password,
   dialect: "postgres",
-  models: [Service],
+  models: [Property, Reservation, Service, User],
 });
 
 export const seedDB = async () => {
   // run seed
+
+  await Property.truncate();
+  await Reservation.truncate();
+  await Service.truncate();
+  await User.truncate();
+
+  await User.create({
+    firstName: "Pedro",
+    lastName: "Larez",
+    email: "pelarez@hotmail.com",
+    password: bcryptjs.hashSync("123456", bcryptjs.genSaltSync()),
+    phone: "+563583584679",
+  });
+
+  await User.create({
+    firstName: "José",
+    lastName: "Rodríguez",
+    email: "joalrope@gmail.com",
+    password: bcryptjs.hashSync("123456", bcryptjs.genSaltSync()),
+    phone: "+584148698680",
+  });
 
   console.log("Database seeded successfully");
 };

@@ -7,8 +7,9 @@ import {
   UpdatedAt,
 } from "sequelize-typescript";
 
-export interface IImmovable extends Model {
+export interface IProperty extends Model {
   id: string;
+  slug: string;
   title: string;
   description: string;
   address: string;
@@ -33,17 +34,23 @@ export interface IImmovable extends Model {
 }
 
 @Table({
-  tableName: "immovables",
-  modelName: "Immovable",
+  tableName: "properties",
+  modelName: "Property",
   timestamps: true,
 })
-export class Immovable extends Model implements IImmovable {
+export class Property extends Model implements IProperty {
   @Column({
     primaryKey: true,
     type: DataType.UUID,
     defaultValue: DataType.UUIDV4,
   })
   declare id: string;
+
+  @Column({
+    type: DataType.STRING(255),
+    allowNull: false,
+  })
+  declare slug: string;
 
   @Column({
     type: DataType.STRING(255),
@@ -69,12 +76,12 @@ export class Immovable extends Model implements IImmovable {
   })
   declare city: string;
 
-  @Column({
+  /*@Column({
     type: DataType.GEOMETRY("POINT"),
     allowNull: false,
     defaultValue: [0, 0],
   })
-  declare Geolocation: [number, number];
+  declare Geolocation: [number, number];*/
 
   @Column({
     type: DataType.STRING(50),
@@ -93,6 +100,7 @@ export class Immovable extends Model implements IImmovable {
 
   @Column({
     type: DataType.DOUBLE(6, 2),
+    defaultValue: 0,
   })
   declare coveredArea: number;
 
@@ -108,21 +116,25 @@ export class Immovable extends Model implements IImmovable {
 
   @Column({
     type: DataType.SMALLINT(),
+    defaultValue: 1,
   })
   declare floors: number;
 
   @Column({
     type: DataType.BOOLEAN(),
+    defaultValue: false,
   })
   declare hasGrill: boolean;
 
   @Column({
     type: DataType.BOOLEAN(),
+    defaultValue: false,
   })
   declare hasGarden: boolean;
 
   @Column({
     type: DataType.BOOLEAN(),
+    defaultValue: false,
   })
   declare hasPool: boolean;
 
@@ -138,6 +150,7 @@ export class Immovable extends Model implements IImmovable {
 
   @Column({
     type: DataType.SMALLINT(),
+    defaultValue: 0,
   })
   declare parkingLots: number;
 

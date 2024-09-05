@@ -7,10 +7,9 @@ import {
   createUser,
   getUser,
   getUsers,
-  /* getUser,
   updateUser,
   deleteUser,
-  getUsersByEmail,*/
+  /*getUsersByEmail,*/
 } from "../controllers";
 
 export const userRouter = Router();
@@ -31,7 +30,6 @@ userRouter.post(
 );
 
 userRouter.get("/", getUsers);
-userRouter.get("/email/:email" /*getUsersByEmail*/);
 userRouter.get(
   "/:id",
   [check("id").custom(userIdAlreadyExists), validateFields],
@@ -43,11 +41,11 @@ userRouter.put(
   [
     validateJWT,
     check("id", "You must provide an ID").notEmpty(),
-    check("id", "Not a valid ID").isMongoId(),
+    check("id", "Not a valid ID").isUUID(),
     check("id").custom(userIdAlreadyExists),
     validateFields,
-  ]
-  //updateUser
+  ],
+  updateUser
 );
 
 userRouter.delete(
@@ -55,9 +53,9 @@ userRouter.delete(
   [
     validateJWT,
     check("id", "You must provide an ID").notEmpty(),
-    check("id", "Not a valid ID ").isMongoId(),
+    check("id", "Not a valid ID ").isUUID(),
     check("id").custom(userIdAlreadyExists),
     validateFields,
-  ]
-  //deleteUser
+  ],
+  deleteUser
 );

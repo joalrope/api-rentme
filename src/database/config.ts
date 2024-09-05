@@ -1,6 +1,13 @@
 import { config } from "dotenv";
 import { Sequelize } from "sequelize-typescript";
-import { Service } from "../models";
+import {
+  Availability,
+  Image,
+  Property,
+  Reservation,
+  Service,
+  User,
+} from "../models";
 
 config();
 
@@ -17,11 +24,6 @@ export const sequelize = new Sequelize({
   username,
   password,
   dialect: "postgres",
-  models: [Service],
+  logging: true,
+  models: [Availability, Image, Property, Reservation, Service, User],
 });
-
-export const seedDB = async () => {
-  // run seed
-
-  console.log("Database seeded successfully");
-};

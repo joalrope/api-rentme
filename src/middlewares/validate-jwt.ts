@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import { HttpStatus } from "../helpers";
-import { Service } from "../models";
+import { User } from "../models";
 
 interface ITokenPayload {
   uid: string;
@@ -30,13 +30,15 @@ export const validateJWT = async (
     const { uid } = decoded as ITokenPayload;
 
     // leer el usuario que corresponde al uid
-    const user = await Service.findByPk(uid);
+    const user = await User.findByPk(uid);
 
     if (!user) {
       return res.status(HttpStatus.UNAUTHORIZED).json({
         msg: "Token no válido - usuario no existe DB",
       });
     }
+
+    console.log("token valido");
 
     next();
     return;

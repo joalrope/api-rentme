@@ -5,17 +5,32 @@ import {
   DataType,
   CreatedAt,
   UpdatedAt,
+  HasMany,
 } from "sequelize-typescript";
 
-export interface IImmovable extends Model {
+import { Availability, Image } from "../models";
+
+interface ILocation {
+  type: string;
+  coordinates: [number, number];
+}
+
+/*interface IAvailable {
+  start: Date;
+  end: Date;
+}*/
+
+export interface IProperty extends Model {
   id: string;
+  slug: string;
   title: string;
   description: string;
   address: string;
   city: string;
-  //Geolocation: coordinates
+  location: ILocation;
   owner: string;
   phone: string;
+  //images: string[];
   totalArea: number;
   coveredArea: number;
   rooms: number;
@@ -25,6 +40,7 @@ export interface IImmovable extends Model {
   hasGarden: boolean;
   hasPool: boolean;
   antiquity: number;
+  //availability: IAvailable[];
   rentalPrice: number;
   parkingLots: number;
   areaInformation: string;
@@ -33,17 +49,23 @@ export interface IImmovable extends Model {
 }
 
 @Table({
-  tableName: "immovables",
-  modelName: "Immovable",
+  tableName: "properties",
+  modelName: "Property",
   timestamps: true,
 })
-export class Immovable extends Model implements IImmovable {
+export class Property extends Model implements IProperty {
   @Column({
     primaryKey: true,
     type: DataType.UUID,
     defaultValue: DataType.UUIDV4,
   })
   declare id: string;
+
+  @Column({
+    type: DataType.STRING(255),
+    allowNull: false,
+  })
+  declare slug: string;
 
   @Column({
     type: DataType.STRING(255),
@@ -72,9 +94,9 @@ export class Immovable extends Model implements IImmovable {
   @Column({
     type: DataType.GEOMETRY("POINT"),
     allowNull: false,
-    defaultValue: [0, 0],
+    defaultValue: { type: "Point", coordinates: [0, 0] },
   })
-  declare Geolocation: [number, number];
+  declare location: { type: string; coordinates: [number, number] };
 
   @Column({
     type: DataType.STRING(50),
@@ -82,17 +104,25 @@ export class Immovable extends Model implements IImmovable {
   declare owner: string;
 
   @Column({
-    type: DataType.STRING(32),
+    type: DataType.STRING(255),
+    allowNull: false,
   })
   declare phone: string;
 
+  @HasMany(() => Image, { as: "images" })
+  declare images: Image[];
+
+  @HasMany(() => Availability, { as: "availability" })
+  declare availability: Availability[];
+
   @Column({
-    type: DataType.DOUBLE(6, 2),
+    type: DataType.DOUBLE(),
   })
   declare totalArea: number;
 
   @Column({
-    type: DataType.DOUBLE(6, 2),
+    type: DataType.DOUBLE(),
+    defaultValue: 0,
   })
   declare coveredArea: number;
 
@@ -108,21 +138,25 @@ export class Immovable extends Model implements IImmovable {
 
   @Column({
     type: DataType.SMALLINT(),
+    defaultValue: 1,
   })
   declare floors: number;
 
   @Column({
     type: DataType.BOOLEAN(),
+    defaultValue: false,
   })
   declare hasGrill: boolean;
 
   @Column({
     type: DataType.BOOLEAN(),
+    defaultValue: false,
   })
   declare hasGarden: boolean;
 
   @Column({
     type: DataType.BOOLEAN(),
+    defaultValue: false,
   })
   declare hasPool: boolean;
 
@@ -131,13 +165,20 @@ export class Immovable extends Model implements IImmovable {
   })
   declare antiquity: number;
 
+  /*@Column({
+    type: DataType.JSONB,
+    allowNull: false,
+  })
+  declare availability: IAvailable[];*/
+
   @Column({
-    type: DataType.DOUBLE(11, 2),
+    type: DataType.DOUBLE(),
   })
   declare rentalPrice: number;
 
   @Column({
     type: DataType.SMALLINT(),
+    defaultValue: 0,
   })
   declare parkingLots: number;
 

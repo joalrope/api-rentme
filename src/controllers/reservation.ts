@@ -1,16 +1,16 @@
 import { Request, Response } from "express";
-import { IService, Service } from "../models";
+import { IReservation, Reservation } from "../models";
 import { HttpStatus } from "../helpers";
 
-export const getServices = async (req: Request, res: Response) => {
+export const getReservations = async (req: Request, res: Response) => {
   const { limit = 5, from = 0 } = req.query;
   let total!: number;
-  let services!: IService[];
+  let reservations!: IReservation[];
 
   try {
-    [total, services] = await Promise.all([
-      Service.count(),
-      Service.findAll({ offset: Number(from), limit: Number(limit) }),
+    [total, reservations] = await Promise.all([
+      Reservation.count(),
+      Reservation.findAll({ offset: Number(from), limit: Number(limit) }),
     ]);
   } catch (error) {
     return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
@@ -22,20 +22,20 @@ export const getServices = async (req: Request, res: Response) => {
 
   return res.status(HttpStatus.OK).json({
     ok: true,
-    msg: "The list of services was successfully obtained",
+    msg: "The list of reservations was successfully obtained",
     result: {
       total,
-      services,
+      reservations,
     },
   });
 };
 
-export const getService = async (req: Request, res: Response) => {
+export const getReservation = async (req: Request, res: Response) => {
   const { id } = req.params;
-  let serviceDB: IService | null;
+  let reservationDB: IReservation | null;
 
   try {
-    serviceDB = await Service.findByPk(id);
+    reservationDB = await Reservation.findByPk(id);
   } catch (error) {
     return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
       ok: false,
@@ -44,48 +44,26 @@ export const getService = async (req: Request, res: Response) => {
     });
   }
 
-  if (!serviceDB) {
+  if (!reservationDB) {
     return res.status(HttpStatus.NOT_FOUND).json({
       ok: false,
-      msg: `The service with id: ${id} does not exist`,
-      result: serviceDB,
+      msg: `The reservation with id: ${id} does not exist`,
+      result: reservationDB,
     });
   }
 
   return res.status(HttpStatus.OK).json({
     ok: true,
-    msg: `The service with id: ${id} was successfully obtained`,
-    result: serviceDB,
+    msg: `The reservation with id: ${id} was successfully obtained`,
+    result: reservationDB,
   });
 };
 
-export const createService = async (req: Request, res: Response) => {
-  const { name, password, ...restData } = req.body;
-
-  let servicesDB: IService | null;
+export const createReservation = async (req: Request, res: Response) => {
+  let reservation!: IReservation;
 
   try {
-    servicesDB = await Service.findOne({ where: { name } });
-  } catch (error) {
-    return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
-      ok: false,
-      msg: "Please talk to the administrator",
-      result: { error },
-    });
-  }
-
-  if (servicesDB) {
-    return res.status(HttpStatus.CONFLICT).json({
-      ok: false,
-      msg: `There is already a service with the email ${name}`,
-      result: {},
-    });
-  }
-
-  let service!: IService;
-
-  try {
-    service = new Service({ name, password, ...restData });
+    reservation = new Reservation({ ...req.body });
   } catch (error) {
     return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
       ok: false,
@@ -95,7 +73,7 @@ export const createService = async (req: Request, res: Response) => {
   }
 
   try {
-    await service.save();
+    await reservation.save();
   } catch (error) {
     return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
       ok: false,
@@ -106,20 +84,20 @@ export const createService = async (req: Request, res: Response) => {
 
   return res.status(HttpStatus.CREATED).json({
     ok: true,
-    msg: "Service created successfully",
+    msg: "Reservation created successfully",
     result: {
-      service,
+      reservation,
     },
   });
 };
 
-export const updateService = async (req: Request, res: Response) => {
+export const updateReservation = async (req: Request, res: Response) => {
   const { id } = req.params;
 
-  let service!: IService | null;
+  let reservation!: IReservation | null;
 
   try {
-    service = await Service.findByPk(id);
+    reservation = await Reservation.findByPk(id);
   } catch (error) {
     return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
       ok: false,
@@ -128,30 +106,30 @@ export const updateService = async (req: Request, res: Response) => {
     });
   }
 
-  if (!service) {
+  if (!reservation) {
     return res.status(HttpStatus.CONFLICT).json({
       ok: false,
-      msg: `The service with id: ${id} does not exist`,
+      msg: `The reservation with id: ${id} does not exist`,
       result: {},
     });
   }
 
-  await service?.update({ ...req.body });
+  await reservation?.update({ ...req.body });
 
-  await service?.save();
+  await reservation?.save();
 
   return res.status(HttpStatus.OK).json({
     ok: true,
-    msg: "Service updated successfully",
-    result: service,
+    msg: "Reservation updated successfully",
+    result: reservation,
   });
 };
 
-export const deleteService = async (req: Request, res: Response) => {
+export const deleteReservation = async (req: Request, res: Response) => {
   const { id } = req.params;
 
   try {
-    await Service.destroy({ where: { id } });
+    await Reservation.destroy({ where: { id } });
   } catch (error) {
     return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
       ok: false,
@@ -162,7 +140,7 @@ export const deleteService = async (req: Request, res: Response) => {
 
   return res.status(HttpStatus.OK).json({
     ok: true,
-    msg: "Service deleted successfully",
+    msg: "Reservation deleted successfully",
     result: {},
   });
 };

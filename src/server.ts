@@ -2,8 +2,9 @@ import express, { Express } from "express";
 import { createServer } from "http";
 import { config } from "dotenv";
 import cors from "cors";
-import { sequelize, seedDB } from "./database/config";
+import "reflect-metadata";
 import { apiRoutes } from "./routes";
+import { seedDB, sequelize } from "./database";
 
 config();
 
@@ -36,7 +37,8 @@ export class Server {
 
   async connectDB() {
     try {
-      await sequelize.sync({ force: true, alter: true });
+      await sequelize.query("CREATE EXTENSION IF NOT EXISTS postgis");
+      await sequelize.sync();
       console.log("Connection has been established successfully.");
     } catch (error) {
       console.error("Unable to connect to the database:", error);

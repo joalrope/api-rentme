@@ -1,7 +1,5 @@
-//import { google } from "googleapis";
 import nodemailer from "nodemailer";
 import { Options } from "nodemailer/lib/mailer";
-//import smtptransport from "nodemailer-smtp-transport";
 import { google } from "googleapis";
 
 export const sendEmail = async (options: Options) => {

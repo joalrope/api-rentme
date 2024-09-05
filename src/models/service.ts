@@ -58,15 +58,15 @@ export class Service extends Model implements IService {
   })
   declare city: string;
 
-  @Column({
+  /*@Column({
     type: DataType.GEOMETRY("POINT"),
     allowNull: false,
     defaultValue: [0, 0],
   })
-  declare Geolocation: [number, number];
+  declare Geolocation: [number, number];*/
 
   @Column({
-    type: DataType.DOUBLE(3, 2),
+    type: DataType.DOUBLE(),
     allowNull: false,
   })
   declare coverageRadius: number;
@@ -82,7 +82,7 @@ export class Service extends Model implements IService {
   declare phone: string;
 
   @Column({
-    type: DataType.DOUBLE(11, 2),
+    type: DataType.DOUBLE(),
   })
   declare servicePrice: number;
 

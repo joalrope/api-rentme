@@ -1,6 +1,44 @@
 import { Response } from "express";
+import { HttpStatus } from "../helpers";
 export { changePassword, forgotPassword, login } from "./auth";
-export { createUser, getUsers, getUser } from "./users";
+export { createUser, getUsers, getUser, updateUser, deleteUser } from "./users";
+export {
+  createProperty,
+  getProperties,
+  getProperty,
+  updateProperty,
+  deleteProperty,
+  getAvailableProperties,
+} from "./property";
+export {
+  createService,
+  getServices,
+  getService,
+  updateService,
+  deleteService,
+} from "./service";
+export {
+  createReservation,
+  getReservations,
+  getReservation,
+  updateReservation,
+  deleteReservation,
+} from "./reservation";
+export {
+  createImage,
+  getImages,
+  getImage,
+  updateImage,
+  deleteImage,
+} from "./image";
+
+export {
+  createAvailability,
+  getAvailabilities,
+  getAvailability,
+  updateAvailability,
+  deleteAvailability,
+} from "./availability";
 
 export interface IResponse {
   ok: boolean;
@@ -18,5 +56,5 @@ export const returnErrorStatus = (
     msg: "Please talk to the administrator",
     result: { error, adic },
   };
-  return res.status(500).json(response);
+  return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(response);
 };

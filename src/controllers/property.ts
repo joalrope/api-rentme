@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
-import { Availability, Image, IProperty, Property } from "../models";
+import { Availability, Image, Property } from "../models";
 import { HttpStatus } from "../helpers";
 import { generateSlugify } from "../helpers/slugify";
 
 export const getProperties = async (req: Request, res: Response) => {
   const { limit = 5, from = 0 } = req.query;
   let total!: number;
-  let properties!: IProperty[];
+  let properties!: Property[] | null;
 
   try {
     [total, properties] = await Promise.all([
@@ -37,7 +37,7 @@ export const getProperties = async (req: Request, res: Response) => {
 
 export const getProperty = async (req: Request, res: Response) => {
   const { id } = req.params;
-  let propertyDB: IProperty | null;
+  let propertyDB: Property | null;
 
   try {
     propertyDB = await Property.findByPk(id, {
@@ -67,7 +67,7 @@ export const getProperty = async (req: Request, res: Response) => {
 };
 
 export const createProperty = async (req: Request, res: Response) => {
-  let property: IProperty;
+  let property: Property;
   const { title, ...restData } = req.body;
 
   const slug = generateSlugify(title);
@@ -94,7 +94,7 @@ export const createProperty = async (req: Request, res: Response) => {
 export const updateProperty = async (req: Request, res: Response) => {
   const { id } = req.params;
 
-  let property!: IProperty | null;
+  let property!: Property | null;
 
   try {
     property = await Property.findByPk(id);

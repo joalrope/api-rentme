@@ -5,7 +5,10 @@
   "main": "app.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start:dev": "nodemon app.ts"
+    "start:dev": "nodemon app.ts",
+    "lint": "eslint . --ext .ts",
+    "start": "node dist/app.js",
+    "build": "tsc -p ."
   },
   "repository": {
     "type": "git",
@@ -16,7 +19,7 @@
     "api",
     "crud",
     "services",
-    "immovables"
+    "properties"
   ],
   "author": "zoo development",
   "license": "ISC",

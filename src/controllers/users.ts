@@ -85,8 +85,17 @@ export const createUser = async (req: Request, res: Response) => {
 
   let user!: IUser;
 
+  // Encriptar contraseña
+  const salt = bcryptjs.genSaltSync();
+  const encriptedPassword = bcryptjs.hashSync(password, salt);
+
   try {
-    user = await User.create({ email, password, ...restData });
+    user = await User.create({
+      email,
+      password: encriptedPassword,
+      role: "user",
+      ...restData,
+    });
   } catch (error) {
     return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
       ok: false,
@@ -95,11 +104,9 @@ export const createUser = async (req: Request, res: Response) => {
     });
   }
 
-  // Encriptar contraseña
-  const salt = bcryptjs.genSaltSync();
-  user.password = bcryptjs.hashSync(password, salt);
+  const accessToken = await generateJWT(user.id, email, user.role);
 
-  const accessToken = generateJWT(user.id, email, user.role);
+  console.log({ accessToken });
 
   return res.status(HttpStatus.CREATED).json({
     ok: true,

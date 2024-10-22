@@ -17,10 +17,10 @@ export const userRouter = Router();
 userRouter.post(
   "/",
   [
-    body("firstName", "firstName is required").not().isEmpty(),
-    body("lastName", "lastName is required").not().isEmpty(),
+    body("fullname", "fullname is required").not().isEmpty(),
     body("email", "The email is invalid").isEmail(),
     body("email").custom(emailAlreadyExists),
+    body("phone", "phone is required").not().isEmpty(),
     body("password", "The password must be more than 6 letters").isLength({
       min: 6,
     }),

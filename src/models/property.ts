@@ -8,7 +8,6 @@ import {
   HasMany,
 } from "sequelize-typescript";
 
-<<<<<<< HEAD
 import { Availability, Image } from "../models";
 
 interface ILocation {
@@ -21,8 +20,6 @@ interface ILocation {
   end: Date;
 }*/
 
-=======
->>>>>>> af5c1f7f1c7287c303d6d5af3b76bfc227b162bb
 export interface IProperty extends Model {
   id: string;
   slug: string;
@@ -94,16 +91,12 @@ export class Property extends Model implements IProperty {
   })
   declare city: string;
 
-  /*@Column({
+  @Column({
     type: DataType.GEOMETRY("POINT"),
     allowNull: false,
     defaultValue: { type: "Point", coordinates: [0, 0] },
   })
-<<<<<<< HEAD
   declare location: { type: string; coordinates: [number, number] };
-=======
-  declare Geolocation: [number, number];*/
->>>>>>> af5c1f7f1c7287c303d6d5af3b76bfc227b162bb
 
   @Column({
     type: DataType.STRING(50),
@@ -128,11 +121,7 @@ export class Property extends Model implements IProperty {
   declare totalArea: number;
 
   @Column({
-<<<<<<< HEAD
     type: DataType.DOUBLE(),
-=======
-    type: DataType.DOUBLE(6, 2),
->>>>>>> af5c1f7f1c7287c303d6d5af3b76bfc227b162bb
     defaultValue: 0,
   })
   declare coveredArea: number;
@@ -175,12 +164,6 @@ export class Property extends Model implements IProperty {
     type: DataType.SMALLINT(),
   })
   declare antiquity: number;
-
-  /*@Column({
-    type: DataType.JSONB,
-    allowNull: false,
-  })
-  declare availability: IAvailable[];*/
 
   @Column({
     type: DataType.DOUBLE(),

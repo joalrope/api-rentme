@@ -9,12 +9,12 @@ import {
 
 export interface IUser extends Model {
   id: string;
-  firstName: string;
-  lastName: string;
+  fullname: string;
   email: string;
   password: string;
   role: string;
   phone: string;
+  image: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -36,13 +36,7 @@ export class User extends Model implements IUser {
     type: DataType.STRING(50),
     allowNull: false,
   })
-  declare firstName: string;
-
-  @Column({
-    type: DataType.STRING(50),
-    allowNull: false,
-  })
-  declare lastName: string;
+  declare fullname: string;
 
   @Column({
     type: DataType.STRING(64),
@@ -64,6 +58,11 @@ export class User extends Model implements IUser {
     allowNull: false,
   })
   declare role: string;
+
+  @Column({
+    type: DataType.STRING(255),
+  })
+  declare image: string;
 
   @Column({
     type: DataType.STRING(32),

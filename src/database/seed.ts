@@ -20,19 +20,20 @@ export const seedDB = async () => {
   await User.truncate();
 
   await User.create({
-    firstName: "Pedro",
-    lastName: "Larez",
+    fullname: "Pedro Larez",
     email: "pelarez@hotmail.com",
     password: bcryptjs.hashSync("123456", bcryptjs.genSaltSync()),
     phone: "+563583584679",
+    image:
+      "https://images.rawpixel.com/image_png_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTA4L2pvYjEwMzQtZWxlbWVudC0wNy00MDMucG5n.png",
   });
 
   await User.create({
-    firstName: "José",
-    lastName: "Rodríguez",
+    fullname: "José Rodríguez",
     email: "joalrope@gmail.com",
     password: bcryptjs.hashSync("123456", bcryptjs.genSaltSync()),
     phone: "+584148698680",
+    image: "",
   });
 
   const property1 = await Property.create({

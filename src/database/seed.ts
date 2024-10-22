@@ -12,12 +12,24 @@ import {
 export const seedDB = async () => {
   // run seed
 
-  await Availability.truncate();
-  await Image.truncate();
-  await Property.truncate({ cascade: true });
-  await Reservation.truncate();
-  await Service.truncate();
-  await User.truncate();
+  if (Availability.isInitialized) {
+    await Availability.truncate();
+  }
+  if (Image.isInitialized) {
+    await Image.truncate();
+  }
+  if (Property.isInitialized) {
+    await Property.truncate({ cascade: true });
+  }
+  if (Reservation.isInitialized) {
+    await Reservation.truncate();
+  }
+  if (Service.isInitialized) {
+    await Service.truncate();
+  }
+  if (User.isInitialized) {
+    await User.truncate();
+  }
 
   await User.create({
     fullname: "Pedro Larez",

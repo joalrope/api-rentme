@@ -20,7 +20,7 @@ export interface IAvailability extends Model {
 }
 
 @Table({
-  tableName: "Availabilities",
+  tableName: "availabilities",
   modelName: "Availability",
   timestamps: true,
 })

@@ -6,9 +6,11 @@ import {
   CreatedAt,
   UpdatedAt,
   HasMany,
+  ForeignKey,
+  BelongsToMany,
 } from "sequelize-typescript";
 
-import { Availability, Image } from "../models";
+import { Availability, Category, Favorite, Image, User } from "../models";
 
 interface ILocation {
   type: string;
@@ -28,9 +30,9 @@ export interface IProperty extends Model {
   address: string;
   city: string;
   location: ILocation;
-  owner: string;
+  categoryId: string;
   phone: string;
-  //images: string[];
+  userId: string;
   totalArea: number;
   coveredArea: number;
   rooms: number;
@@ -40,7 +42,6 @@ export interface IProperty extends Model {
   hasGarden: boolean;
   hasPool: boolean;
   antiquity: number;
-  //availability: IAvailable[];
   rentalPrice: number;
   parkingLots: number;
   areaInformation: string;
@@ -56,7 +57,7 @@ export interface IProperty extends Model {
 export class Property extends Model implements IProperty {
   @Column({
     primaryKey: true,
-    type: DataType.UUID,
+    type: DataType.UUIDV4,
     defaultValue: DataType.UUIDV4,
   })
   declare id: string;
@@ -98,10 +99,22 @@ export class Property extends Model implements IProperty {
   })
   declare location: { type: string; coordinates: [number, number] };
 
+  @ForeignKey(() => User)
   @Column({
-    type: DataType.STRING(50),
+    type: DataType.UUIDV4,
+    allowNull: false,
   })
-  declare owner: string;
+  userId!: string;
+
+  @ForeignKey(() => Category)
+  @Column({
+    type: DataType.UUID,
+    allowNull: false,
+  })
+  categoryId!: string;
+
+  @BelongsToMany(() => User, () => Favorite)
+  users!: User[];
 
   @Column({
     type: DataType.STRING(255),

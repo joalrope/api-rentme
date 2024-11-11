@@ -5,7 +5,10 @@ import {
   DataType,
   CreatedAt,
   UpdatedAt,
+  HasMany,
 } from "sequelize-typescript";
+import { Favorite } from "./favorite";
+import { Property } from "./property";
 
 export interface IUser extends Model {
   id: string;
@@ -14,7 +17,7 @@ export interface IUser extends Model {
   password: string;
   role: string;
   phone: string;
-  image: string;
+  picture: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -27,7 +30,7 @@ export interface IUser extends Model {
 export class User extends Model implements IUser {
   @Column({
     primaryKey: true,
-    type: DataType.UUID,
+    type: DataType.UUIDV4,
     defaultValue: DataType.UUIDV4,
   })
   declare id: string;
@@ -62,12 +65,18 @@ export class User extends Model implements IUser {
   @Column({
     type: DataType.STRING(255),
   })
-  declare image: string;
+  declare picture: string;
 
   @Column({
     type: DataType.STRING(32),
   })
   declare phone: string;
+
+  @HasMany(() => Property)
+  property!: Property[];
+
+  @HasMany(() => Favorite, { as: "favorites" })
+  declare favorites: Favorite[];
 
   @CreatedAt
   declare createdAt: Date;

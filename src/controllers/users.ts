@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import bcryptjs from "bcryptjs";
-import { IUser, User } from "../models";
+import { Favorite, IUser, Property, User } from "../models";
 import { generateJWT, HttpStatus } from "../helpers";
 
 export const getUsers = async (req: Request, res: Response) => {
@@ -11,7 +11,11 @@ export const getUsers = async (req: Request, res: Response) => {
   try {
     [total, users] = await Promise.all([
       User.count(),
-      User.findAll({ offset: Number(from), limit: Number(limit) }),
+      User.findAll({
+        include: [Favorite, Property],
+        offset: Number(from),
+        limit: Number(limit),
+      }),
     ]);
   } catch (error) {
     return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
@@ -36,7 +40,7 @@ export const getUser = async (req: Request, res: Response) => {
   let userDB: IUser | null;
 
   try {
-    userDB = await User.findByPk(id);
+    userDB = await User.findByPk(id, { include: [Favorite, Property] });
   } catch (error) {
     return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
       ok: false,
@@ -105,8 +109,6 @@ export const createUser = async (req: Request, res: Response) => {
   }
 
   const accessToken = await generateJWT(user.id, email, user.role);
-
-  console.log({ accessToken });
 
   return res.status(HttpStatus.CREATED).json({
     ok: true,

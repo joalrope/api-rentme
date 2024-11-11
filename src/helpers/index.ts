@@ -4,10 +4,11 @@ export { HttpStatus } from "./constants/http-status-code";
 export { generateSlugify } from "./slugify";
 export {
   availabilityIdAlreadyExists,
+  categoryIdAlreadyExists,
   emailAlreadyExists,
   imageIdAlreadyExists,
   propertyIdAlreadyExists,
-  reservationIdAlreadyExists,
+  bookingIdAlreadyExists,
   serviceIdAlreadyExists,
   userIdAlreadyExists,
 } from "./db-validators";

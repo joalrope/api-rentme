@@ -2,12 +2,14 @@ import { config } from "dotenv";
 import { Sequelize } from "sequelize-typescript";
 import {
   Availability,
+  Favorite,
   Image,
   Property,
-  Reservation,
+  Booking,
   Service,
   User,
-} from "../models";
+  Category,
+} from "../../models";
 
 config();
 
@@ -24,6 +26,15 @@ export const sequelize = new Sequelize({
   username,
   password,
   dialect: "postgres",
-  logging: true,
-  models: [Availability, Image, Property, Reservation, Service, User],
+  sync: { alter: true },
+  models: [
+    Availability,
+    Booking,
+    Category,
+    Favorite,
+    Image,
+    Property,
+    Service,
+    User,
+  ],
 });

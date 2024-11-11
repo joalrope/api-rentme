@@ -27,14 +27,14 @@ export interface IImage extends Model {
 export class Image extends Model implements IImage {
   @Column({
     primaryKey: true,
-    type: DataType.UUID,
+    type: DataType.UUIDV4,
     defaultValue: DataType.UUIDV4,
   })
   declare id: string;
 
   @ForeignKey(() => Property)
   @Column({
-    type: DataType.UUID,
+    type: DataType.UUIDV4,
   })
   declare propertyId: string;
 

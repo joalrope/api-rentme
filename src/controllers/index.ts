@@ -18,12 +18,12 @@ export {
   deleteService,
 } from "./service";
 export {
-  createReservation,
-  getReservations,
-  getReservation,
-  updateReservation,
-  deleteReservation,
-} from "./reservation";
+  createBooking,
+  getBookings,
+  getBooking,
+  updateBooking,
+  deleteBooking,
+} from "./booking";
 export {
   createImage,
   getImages,
@@ -39,6 +39,14 @@ export {
   updateAvailability,
   deleteAvailability,
 } from "./availability";
+
+export {
+  createCategory,
+  getCategories,
+  getCategory,
+  updateCategory,
+  deleteCategory,
+} from "./category";
 
 export interface IResponse {
   ok: boolean;

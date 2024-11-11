@@ -38,12 +38,9 @@ export const validateJWT = async (
       });
     }
 
-    console.log("token valido");
-
     next();
     return;
   } catch (error) {
-    console.log(error);
     return res.status(HttpStatus.UNAUTHORIZED).json({
       msg: `Invalid token - ${error}`,
     });

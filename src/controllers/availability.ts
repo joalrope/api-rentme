@@ -62,8 +62,6 @@ export const getAvailability = async (req: Request, res: Response) => {
 export const createAvailability = async (req: Request, res: Response) => {
   let availability: IAvailability;
 
-  console.log({ data: req.body });
-
   try {
     availability = await Availability.create({ ...req.body });
   } catch (error) {

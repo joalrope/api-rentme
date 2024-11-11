@@ -34,8 +34,6 @@ export const getImage = async (req: Request, res: Response) => {
   const { id } = req.params;
   let imageDB: IImage | null;
 
-  console.log({ id });
-
   try {
     imageDB = await Image.findByPk(id);
   } catch (error) {

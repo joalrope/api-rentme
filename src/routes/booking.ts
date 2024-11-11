@@ -2,18 +2,18 @@ import { Router } from "express";
 import { body, check } from "express-validator";
 
 import { validateFields, validateJWT } from "../middlewares";
-import { reservationIdAlreadyExists } from "../helpers";
+import { bookingIdAlreadyExists } from "../helpers";
 import {
-  createReservation,
-  getReservation,
+  createBooking,
+  getBooking,
   getProperties,
-  updateReservation,
-  deleteReservation,
+  updateBooking,
+  deleteBooking,
 } from "../controllers";
 
-export const reservationRouter = Router();
+export const bookingRouter = Router();
 
-reservationRouter.post(
+bookingRouter.post(
   "/",
   [
     body("userId", "userId is required").not().isEmpty(),
@@ -28,36 +28,36 @@ reservationRouter.post(
     body("price", "price is not a valid number").isNumeric(),
     validateFields,
   ],
-  createReservation
+  createBooking
 );
 
-reservationRouter.get("/", getProperties);
-reservationRouter.get(
+bookingRouter.get("/", getProperties);
+bookingRouter.get(
   "/:id",
-  [check("id").custom(reservationIdAlreadyExists), validateFields],
-  getReservation
+  [check("id").custom(bookingIdAlreadyExists), validateFields],
+  getBooking
 );
 
-reservationRouter.put(
+bookingRouter.put(
   "/:id",
   [
     validateJWT,
     check("id", "You must provide an ID").notEmpty(),
     check("id", "Not a valid ID").isUUID(),
-    check("id").custom(reservationIdAlreadyExists),
+    check("id").custom(bookingIdAlreadyExists),
     validateFields,
   ],
-  updateReservation
+  updateBooking
 );
 
-reservationRouter.delete(
+bookingRouter.delete(
   "/:id",
   [
     validateJWT,
     check("id", "You must provide an ID").notEmpty(),
     check("id", "Not a valid ID ").isUUID(),
-    check("id").custom(reservationIdAlreadyExists),
+    check("id").custom(bookingIdAlreadyExists),
     validateFields,
   ],
-  deleteReservation
+  deleteBooking
 );

@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
-import { Availability, Image, Property } from "../models";
+import { Availability, Image, Property, User } from "../models";
 import { HttpStatus } from "../helpers";
 import { generateSlugify } from "../helpers/slugify";
+import { getUserData } from "../helpers/jwt";
 
 export const getProperties = async (req: Request, res: Response) => {
   const { limit = 5, from = 0 } = req.query;
@@ -10,9 +11,9 @@ export const getProperties = async (req: Request, res: Response) => {
 
   try {
     [total, properties] = await Promise.all([
-      Property.count({ include: [Availability, Image] }),
+      Property.count(),
       Property.findAll({
-        include: [Availability, Image],
+        include: [Availability, Image, User],
         offset: Number(from),
         limit: Number(limit),
       }),
@@ -69,6 +70,18 @@ export const getProperty = async (req: Request, res: Response) => {
 export const createProperty = async (req: Request, res: Response) => {
   let property: Property;
   const { title, ...restData } = req.body;
+
+  const { userId } = getUserData(req);
+
+  const propertyDB = await Property.findOne({ where: { userId, title } });
+
+  if (propertyDB) {
+    return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+      ok: false,
+      msg: `There is already a property with the title ${title}`,
+      result: {},
+    });
+  }
 
   const slug = generateSlugify(title);
 

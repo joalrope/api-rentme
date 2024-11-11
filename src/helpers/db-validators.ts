@@ -2,9 +2,10 @@ import {
   Availability,
   Image,
   Property,
-  Reservation,
+  Booking,
   Service,
   User,
+  Category,
 } from "../models";
 
 export const emailAlreadyExists = async (email: string = "") => {
@@ -36,12 +37,12 @@ export const propertyIdAlreadyExists = async (id: string) => {
   }
 };
 
-export const reservationIdAlreadyExists = async (id: string) => {
+export const bookingIdAlreadyExists = async (id: string) => {
   // Verificar si el id existe
-  const reservationDB = await Reservation.findByPk(id);
+  const bookingDB = await Booking.findByPk(id);
 
-  if (!reservationDB) {
-    throw new Error(`Reservation with id: ${id} does not exist`);
+  if (!bookingDB) {
+    throw new Error(`Booking with id: ${id} does not exist`);
   }
 };
 
@@ -69,5 +70,13 @@ export const availabilityIdAlreadyExists = async (id: string) => {
 
   if (!availabilityDB) {
     throw new Error(`Availability with id: ${id} does not exist`);
+  }
+};
+export const categoryIdAlreadyExists = async (id: string) => {
+  // Verificar si el id existe
+  const categoryDB = await Category.findByPk(id);
+
+  if (!categoryDB) {
+    throw new Error(`Category with id: ${id} does not exist`);
   }
 };

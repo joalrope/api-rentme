@@ -7,7 +7,7 @@ import {
   UpdatedAt,
 } from "sequelize-typescript";
 
-export interface IReservation extends Model {
+export interface IBooking extends Model {
   id: string;
   userId: string;
   propertyId: string;
@@ -22,15 +22,15 @@ export interface IReservation extends Model {
 }
 
 @Table({
-  tableName: "reservations",
-  modelName: "Reservation",
+  tableName: "bookings",
+  modelName: "Booking",
   timestamps: true,
 })
-export class Reservation extends Model implements IReservation {
+export class Booking extends Model implements IBooking {
   @Column({
     primaryKey: true,
     type: DataType.UUID,
-    defaultValue: DataType.UUIDV4,
+    defaultValue: DataType.UUID,
   })
   declare id: string;
 

@@ -17,20 +17,16 @@ interface ILocation {
   coordinates: [number, number];
 }
 
-/*interface IAvailable {
-  start: Date;
-  end: Date;
-}*/
-
 export interface IProperty extends Model {
   id: string;
   slug: string;
   title: string;
   description: string;
   address: string;
-  city: string;
+  //city: string;
   location: ILocation;
   categoryId: string;
+  owner: string;
   phone: string;
   userId: string;
   totalArea: number;
@@ -38,10 +34,18 @@ export interface IProperty extends Model {
   rooms: number;
   toilets: number;
   floors: number;
+  antiquity: number;
+  hasAirCond: boolean;
+  hasElevator: boolean;
+  hasHeating: boolean;
   hasGrill: boolean;
   hasGarden: boolean;
+  hasGym: boolean;
+  hasLaundry: boolean;
   hasPool: boolean;
-  antiquity: number;
+  hasPowerPlant: boolean;
+  hasValetPark: boolean;
+  hasWifi: boolean;
   rentalPrice: number;
   parkingLots: number;
   areaInformation: string;
@@ -57,7 +61,7 @@ export interface IProperty extends Model {
 export class Property extends Model implements IProperty {
   @Column({
     primaryKey: true,
-    type: DataType.UUIDV4,
+    type: DataType.UUID,
     defaultValue: DataType.UUIDV4,
   })
   declare id: string;
@@ -101,7 +105,7 @@ export class Property extends Model implements IProperty {
 
   @ForeignKey(() => User)
   @Column({
-    type: DataType.UUIDV4,
+    type: DataType.UUID,
     allowNull: false,
   })
   userId!: string;
@@ -115,6 +119,12 @@ export class Property extends Model implements IProperty {
 
   @BelongsToMany(() => User, () => Favorite)
   users!: User[];
+
+  @Column({
+    type: DataType.STRING(255),
+    allowNull: true,
+  })
+  declare owner: string;
 
   @Column({
     type: DataType.STRING(255),
@@ -159,6 +169,12 @@ export class Property extends Model implements IProperty {
     type: DataType.BOOLEAN(),
     defaultValue: false,
   })
+  declare hasElevator: boolean;
+
+  @Column({
+    type: DataType.BOOLEAN(),
+    defaultValue: false,
+  })
   declare hasGrill: boolean;
 
   @Column({
@@ -171,7 +187,49 @@ export class Property extends Model implements IProperty {
     type: DataType.BOOLEAN(),
     defaultValue: false,
   })
+  declare hasGym: boolean;
+
+  @Column({
+    type: DataType.BOOLEAN(),
+    defaultValue: false,
+  })
+  declare hasLaundry: boolean;
+
+  @Column({
+    type: DataType.BOOLEAN(),
+    defaultValue: false,
+  })
   declare hasPool: boolean;
+
+  @Column({
+    type: DataType.BOOLEAN(),
+    defaultValue: false,
+  })
+  declare hasPowerPlant: boolean;
+
+  @Column({
+    type: DataType.BOOLEAN(),
+    defaultValue: false,
+  })
+  declare hasAirCond: boolean;
+
+  @Column({
+    type: DataType.BOOLEAN(),
+    defaultValue: false,
+  })
+  declare hasHeating: boolean;
+
+  @Column({
+    type: DataType.BOOLEAN(),
+    defaultValue: false,
+  })
+  declare hasValetPark: boolean;
+
+  @Column({
+    type: DataType.BOOLEAN(),
+    defaultValue: false,
+  })
+  declare hasWifi: boolean;
 
   @Column({
     type: DataType.SMALLINT(),

@@ -30,7 +30,7 @@ export class Service extends Model implements IService {
   @Column({
     primaryKey: true,
     type: DataType.UUID,
-    defaultValue: DataType.UUID,
+    defaultValue: DataType.UUIDV4,
   })
   declare id: string;
 

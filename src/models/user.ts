@@ -30,7 +30,7 @@ export interface IUser extends Model {
 export class User extends Model implements IUser {
   @Column({
     primaryKey: true,
-    type: DataType.UUIDV4,
+    type: DataType.UUID,
     defaultValue: DataType.UUIDV4,
   })
   declare id: string;

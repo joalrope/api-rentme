@@ -27,14 +27,14 @@ export interface IAvailability extends Model {
 export class Availability extends Model implements IAvailability {
   @Column({
     primaryKey: true,
-    type: DataType.UUIDV4,
+    type: DataType.UUID,
     defaultValue: DataType.UUIDV4,
   })
   declare id: string;
 
   @ForeignKey(() => Property)
   @Column({
-    type: DataType.UUIDV4,
+    type: DataType.UUID,
   })
   declare propertyId: string;
 

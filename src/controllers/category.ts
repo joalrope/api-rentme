@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { Category, ICategory } from "../models";
-import { generateSlugify, HttpStatus } from "../helpers";
+import { generateSlug, HttpStatus } from "../helpers";
 
 interface ICat extends ICategory {
   item?: number;
@@ -87,7 +87,7 @@ export const createCategory = async (req: Request, res: Response) => {
     });
   }
 
-  const slug = generateSlugify(name);
+  const slug = generateSlug(name);
 
   try {
     category = await Category.create({ name, slug, ...restData });

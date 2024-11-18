@@ -1,7 +1,7 @@
 import slugify from "slugify";
 import crypto from "crypto";
 
-export const generateSlugify = (char: string): string => {
+export const generateSlug = (char: string): string => {
   const prevSlug = slugify(char, {
     lower: true,
     strict: true,

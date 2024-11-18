@@ -1,13 +1,15 @@
 import { Request, Response } from "express";
 import { Availability, Image, Property, User } from "../models";
 import { HttpStatus } from "../helpers";
-import { generateSlugify } from "../helpers/slugify";
-import { getUserData } from "../helpers/jwt";
+import { generateSlug } from "../helpers/slugify";
+//import { getUserData } from "../helpers/jwt";
 
 export const getProperties = async (req: Request, res: Response) => {
   const { limit = 5, from = 0 } = req.query;
   let total!: number;
   let properties!: Property[] | null;
+
+  console.log("getting properties");
 
   try {
     [total, properties] = await Promise.all([
@@ -69,9 +71,7 @@ export const getProperty = async (req: Request, res: Response) => {
 
 export const createProperty = async (req: Request, res: Response) => {
   let property: Property;
-  const { title, ...restData } = req.body;
-
-  const { userId } = getUserData(req);
+  const { title, userId, ...restData } = req.body;
 
   const propertyDB = await Property.findOne({ where: { userId, title } });
 
@@ -83,11 +83,12 @@ export const createProperty = async (req: Request, res: Response) => {
     });
   }
 
-  const slug = generateSlugify(title);
+  const slug = generateSlug(title);
 
   try {
-    property = await Property.create({ title, slug, ...restData });
+    property = await Property.create({ title, slug, userId, ...restData });
   } catch (error) {
+    console.log(error);
     return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
       ok: false,
       msg: "Please talk to the administrator",
